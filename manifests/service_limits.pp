@@ -36,6 +36,12 @@ define systemd::service_limits(
 
   include systemd
 
+  notice("systemd::service_limits $name $ensure $path $limits $source $restart_service")
+  notify {"systemd::service_limits $name $ensure $path $limits $source $restart_service":
+    withpath => true,
+  }
+
+
   if $name !~ Pattern['^.+\.(service|socket|mount|swap)$'] {
     fail('$name must match Pattern["^.+\.(service|socket|mount|swap)$"]')
   }

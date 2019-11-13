@@ -38,6 +38,12 @@ define systemd::dropin_file(
 ) {
   include systemd
 
+  notice("systemd::dropin_file $name $unit $filename $path $source $target")
+  notify {"systemd::dropin_file $name $unit $filename $path $source $target":
+    withpath => true,
+  }
+
+
   if $target {
     $_ensure = 'link'
   } else {
@@ -53,6 +59,11 @@ define systemd::dropin_file(
       owner  => 'root',
       group  => 'root',
     })
+  }
+
+  notice("systemd::dropin_file file ${path}/${unit}.d/${filename} $_ensure")
+  notify {"systemd::dropin_file file ${path}/${unit}.d/${filename} $_ensure":
+    withpath => true,
   }
 
   file { "${path}/${unit}.d/${filename}":
